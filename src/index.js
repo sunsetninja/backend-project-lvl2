@@ -95,11 +95,16 @@ function prettyDiff(diff) {
   }, {});
 }
 
+function diffToString(diff) {
+  // TODO: удалять нужно только последнюю запятую в строке
+  return JSON.stringify(diff, null, 2).replace(/["|,]/g, '');
+}
+
 function genDiff(filepath1, filepath2) {
   const filedata1 = JSON.parse(readFileSync(path.resolve(filepath1)));
   const filedata2 = JSON.parse(readFileSync(path.resolve(filepath2)));
 
-  return prettyDiff(getDiff(filedata1, filedata2));
+  return diffToString(prettyDiff(getDiff(filedata1, filedata2)));
 }
 
 export default genDiff;
