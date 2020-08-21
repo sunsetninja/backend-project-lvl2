@@ -107,4 +107,5 @@ function genDiff(filepath1, filepath2) {
   return diffToString(prettyDiff(getDiff(filedata1, filedata2)));
 }
 
+export { getDiff, prettyDiff, diffToString };
 export default genDiff;
