@@ -84,7 +84,7 @@ function prettyDiff(diff) {
     if (item.diff) {
       return {
         ...acc,
-        [key]: prettyDiff(item.diff),
+        [`  ${key}`]: prettyDiff(item.diff),
       };
     }
 
