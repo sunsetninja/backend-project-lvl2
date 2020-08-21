@@ -18,4 +18,17 @@ describe('genDiff tests', () => {
 
     expect(genDiff(getFixturesFilePath('file1.json'), getFixturesFilePath('file2.json'))).toEqual(expected);
   });
+
+  test('should return correct result with flat YML files', () => {
+    const expected = `{
+  - follow: false
+    host: hexlet.io
+  - proxy: 123.234.53.22
+  - timeout: 50
+  + timeout: 20
+  + verbose: true
+}`;
+
+    expect(genDiff(getFixturesFilePath('file1.yml'), getFixturesFilePath('file2.yml'))).toEqual(expected);
+  });
 });

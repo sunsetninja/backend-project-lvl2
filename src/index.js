@@ -1,6 +1,7 @@
 import { readFileSync } from 'fs';
 import path from 'path';
 import _ from 'lodash';
+import { parseFile } from './parsers';
 
 const {
   has, union, sortBy, isPlainObject,
@@ -101,8 +102,8 @@ function diffToString(diff) {
 }
 
 function genDiff(filepath1, filepath2) {
-  const filedata1 = JSON.parse(readFileSync(path.resolve(filepath1)));
-  const filedata2 = JSON.parse(readFileSync(path.resolve(filepath2)));
+  const filedata1 = parseFile(filepath1, readFileSync(path.resolve(filepath1)));
+  const filedata2 = parseFile(filepath2, readFileSync(path.resolve(filepath2)));
 
   return diffToString(prettyDiff(getDiff(filedata1, filedata2)));
 }
