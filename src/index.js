@@ -102,8 +102,8 @@ function diffToString(diff) {
 }
 
 function genDiff(filepath1, filepath2) {
-  const filedata1 = parseFile(filepath1, readFileSync(path.resolve(filepath1)));
-  const filedata2 = parseFile(filepath2, readFileSync(path.resolve(filepath2)));
+  const filedata1 = parseFile(filepath1, readFileSync(path.resolve(filepath1), 'utf-8'));
+  const filedata2 = parseFile(filepath2, readFileSync(path.resolve(filepath2), 'utf-8'));
 
   return diffToString(prettyDiff(getDiff(filedata1, filedata2)));
 }

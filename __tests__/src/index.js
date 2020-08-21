@@ -1,4 +1,6 @@
-import { describe, test, expect } from '@jest/globals';
+import {
+  describe, test, expect,
+} from '@jest/globals';
 import genDiff from '../../src/index.js';
 
 function getFixturesFilePath(filename) {
@@ -6,8 +8,7 @@ function getFixturesFilePath(filename) {
 }
 
 describe('genDiff tests', () => {
-  test('should return correct result with flat JSON files', () => {
-    const expected = `{
+  const expectedFlat = `{
   - follow: false
     host: hexlet.io
   - proxy: 123.234.53.22
@@ -16,19 +17,13 @@ describe('genDiff tests', () => {
   + verbose: true
 }`;
 
-    expect(genDiff(getFixturesFilePath('file1.json'), getFixturesFilePath('file2.json'))).toEqual(expected);
-  });
-
-  test('should return correct result with flat YML files', () => {
-    const expected = `{
-  - follow: false
-    host: hexlet.io
-  - proxy: 123.234.53.22
-  - timeout: 50
-  + timeout: 20
-  + verbose: true
-}`;
-
-    expect(genDiff(getFixturesFilePath('file1.yml'), getFixturesFilePath('file2.yml'))).toEqual(expected);
+  test.each([
+    ['file1.json', 'file2.json', expectedFlat],
+    ['file1.yml', 'file2.yml', expectedFlat],
+    ['file1.ini', 'file2.ini', expectedFlat],
+  ])('should return correct diff output with flat configs: %s %s', (filename1, filename2, expected) => {
+    expect(
+      genDiff(getFixturesFilePath(filename1), getFixturesFilePath(filename2)),
+    ).toEqual(expected);
   });
 });
