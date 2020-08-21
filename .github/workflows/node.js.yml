@@ -22,3 +22,4 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: make install-ci
       - run: make lint
+      - run: make test

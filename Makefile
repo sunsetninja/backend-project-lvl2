@@ -4,3 +4,5 @@ install-ci:
 	npm ci
 lint:
 	npx eslint .
+test:
+	npm t

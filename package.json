@@ -8,7 +8,12 @@
     "gendiff": "/bin/gendiff.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx -n --experimental-vm-modules jest",
+    "test:watch": "npx -n --experimental-vm-modules jest --watch"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {}
   },
   "repository": {
     "type": "git",
@@ -24,7 +29,10 @@
   "devDependencies": {
     "eslint": "^7.6.0",
     "eslint-config-airbnb-base": "^14.2.0",
-    "eslint-plugin-import": "^2.22.0"
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^23.20.0",
+    "jest": "^26.4.1",
+    "jest-cli": "^26.4.1"
   },
   "dependencies": {
     "commander": "^6.0.0",
