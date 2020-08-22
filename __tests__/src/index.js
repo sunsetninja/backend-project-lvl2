@@ -9,13 +9,35 @@ function getFixturesFilePath(filename) {
 }
 
 describe('genDiff tests', () => {
-  const expected = readFileSync(getFixturesFilePath('expected.txt'), 'utf-8');
+  describe('stylish formatter', () => {
+    const expected = readFileSync(getFixturesFilePath('expected-stylish.txt'), 'utf-8');
 
-  test.each([
-    'json', 'yml', 'ini',
-  ])('should return correct diff output with configs with type: %s', (configExtention) => {
-    expect(
-      genDiff(getFixturesFilePath(`file1.${configExtention}`), getFixturesFilePath(`file2.${configExtention}`)),
-    ).toEqual(expected);
+    test.each([
+      'json', 'yml', 'ini',
+    ])('should return correct diff output with configs with type: %s', (configExtention) => {
+      expect(
+        genDiff(
+          getFixturesFilePath(`file1.${configExtention}`),
+          getFixturesFilePath(`file2.${configExtention}`),
+          { format: 'stylish' },
+        ),
+      ).toEqual(expected);
+    });
+  });
+
+  describe('plain formatter', () => {
+    const expected = readFileSync(getFixturesFilePath('expected-plain.txt'), 'utf-8');
+
+    test.each([
+      'json', 'yml', 'ini',
+    ])('should return correct diff output with configs with type: %s', (configExtention) => {
+      expect(
+        genDiff(
+          getFixturesFilePath(`file1.${configExtention}`),
+          getFixturesFilePath(`file2.${configExtention}`),
+          { format: 'plain' },
+        ),
+      ).toEqual(expected);
+    });
   });
 });
