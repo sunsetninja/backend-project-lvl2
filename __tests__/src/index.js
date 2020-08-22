@@ -9,24 +9,13 @@ function getFixturesFilePath(filename) {
 }
 
 describe('genDiff tests', () => {
-  const expectedFlat = readFileSync(getFixturesFilePath('expected-flat.txt'), 'utf-8');
-  const expectedNested = readFileSync(getFixturesFilePath('expected-nested.txt'), 'utf-8');
+  const expected = readFileSync(getFixturesFilePath('expected.txt'), 'utf-8');
 
   test.each([
-    ['file1.json', 'file2.json', expectedFlat],
-    ['file1.yml', 'file2.yml', expectedFlat],
-    ['file1.ini', 'file2.ini', expectedFlat],
-  ])('should return correct diff output with flat configs: %s %s', (filename1, filename2, expected) => {
+    'json', 'yml', 'ini',
+  ])('should return correct diff output with configs with type: %s', (configExtention) => {
     expect(
-      genDiff(getFixturesFilePath(filename1), getFixturesFilePath(filename2)),
-    ).toEqual(expected);
-  });
-
-  test.each([
-    ['file1-nested.json', 'file2-nested.json', expectedNested],
-  ])('should return correct diff output with nested configs: %s %s', (filename1, filename2, expected) => {
-    expect(
-      genDiff(getFixturesFilePath(filename1), getFixturesFilePath(filename2)),
+      genDiff(getFixturesFilePath(`file1.${configExtention}`), getFixturesFilePath(`file2.${configExtention}`)),
     ).toEqual(expected);
   });
 });

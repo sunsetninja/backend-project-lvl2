@@ -28,7 +28,7 @@ function renderValue(data, depth) {
   return data;
 }
 
-function prettifyDiff(diff, depth = 0) {
+function format(diff, depth = 0) {
   const items = diff.flatMap((node) => {
     const { key, type } = node;
 
@@ -41,7 +41,7 @@ function prettifyDiff(diff, depth = 0) {
     }
 
     if (type === 'nested') {
-      return `${renderKey(key, depth)}: ${prettifyDiff(node.children, depth + 1)}`;
+      return `${renderKey(key, depth)}: ${format(node.children, depth + 1)}`;
     }
 
     if (type === 'changed') {
@@ -57,4 +57,4 @@ function prettifyDiff(diff, depth = 0) {
   return renderItems(items, depth);
 }
 
-export { prettifyDiff };
+export default { format };
