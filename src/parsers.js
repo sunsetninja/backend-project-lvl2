@@ -8,10 +8,10 @@ const parsers = {
   '.ini': ini.parse,
 };
 
-function parseFile(filepath, filecontent) {
+function parseConfigFile(filepath, filecontent) {
   const parser = parsers[path.extname(filepath)];
 
   return parser(filecontent);
 }
 
-export { parseFile };
+export { parseConfigFile };
