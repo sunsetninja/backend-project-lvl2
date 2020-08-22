@@ -1,91 +1,83 @@
 import { readFileSync } from 'fs';
 import path from 'path';
 import _ from 'lodash';
-import { parseFile } from './parsers';
+import { parseFile } from './parsers.js';
 
 const {
-  has, union, sortBy, isPlainObject,
+  has, union, sortBy, isObject,
 } = _;
 
 function getDiff(obj1, obj2) {
-  const allKeys = union(Object.keys(obj1).concat(Object.keys(obj2)));
+  const allKeys = sortBy(union(Object.keys(obj1).concat(Object.keys(obj2))));
 
-  const diff = allKeys.reduce((acc, key) => {
+  const diff = allKeys.map((key) => {
     // удаление
-    if (has(obj1, key) && !has(obj2, key)) {
-      return [...acc, {
+    if (!has(obj2, key)) {
+      return {
         key,
-        action: 'deleted',
+        type: 'deleted',
         prevValue: obj1[key],
-      }];
+      };
     }
 
     // добавление
-    if (!has(obj1, key) && has(obj2, key)) {
-      return [...acc, {
+    if (!has(obj1, key)) {
+      return {
         key,
-        action: 'added',
+        type: 'added',
         value: obj2[key],
-      }];
+      };
     }
 
     // изменение
-    if (has(obj1, key) && has(obj2, key)) {
-      if (obj1[key] === obj2[key]) {
-        return [...acc, {
-          key,
-          action: 'not_edited',
-          value: obj2[key],
-        }];
-      }
-
-      // TODO: добавить обработку массивов
-      if (isPlainObject(obj1[key]) && isPlainObject(obj2[key])) {
-        return [...acc, {
-          key,
-          action: 'edited',
-          diff: getDiff(obj1[key], obj2[key]),
-        }];
-      }
-
-      return [...acc, {
+    if (isObject(obj1[key]) && isObject(obj2[key])) {
+      return {
         key,
-        action: 'deleted',
-        prevValue: obj1[key],
-      }, {
-        key,
-        action: 'added',
-        value: obj2[key],
-      }];
+        type: 'nested',
+        children: getDiff(obj1[key], obj2[key]),
+      };
     }
 
-    return acc;
+    if (obj1[key] !== obj2[key]) {
+      return {
+        key,
+        type: 'changed',
+        value: obj2[key],
+        prevValue: obj1[key],
+      };
+    }
+
+    return {
+      key,
+      type: 'unchanged',
+      value: obj1[key],
+    };
   }, []);
 
-  return sortBy(diff, ['key']);
+  return diff;
 }
 
 function prettyDiff(diff) {
   return diff.reduce((acc, item) => {
-    const { key, action } = item;
-    if (action === 'deleted') {
+    const { key, type } = item;
+    if (type === 'deleted') {
       return {
         ...acc,
         [`- ${key}`]: item.prevValue,
       };
     }
 
-    if (action === 'added') {
+    if (type === 'added') {
       return {
         ...acc,
         [`+ ${key}`]: item.value,
       };
     }
 
-    if (item.diff) {
+    if (type === 'nested') {
       return {
         ...acc,
-        [`  ${key}`]: prettyDiff(item.diff),
+        [`  ${key}`]: prettyDiff(item.children),
       };
     }
 
