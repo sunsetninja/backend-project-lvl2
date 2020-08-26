@@ -1,9 +1,13 @@
 import _ from 'lodash';
+import { nodeTypes } from '../builder.js';
 
 const { isObject } = _;
 
+// Common renderers for all node types
 function renderIndent(count) {
-  return '    '.repeat(count);
+  const tabLength = 4;
+
+  return ' '.repeat(tabLength * count);
 }
 
 function renderItems(items, depth) {
@@ -28,30 +32,46 @@ function renderValue(data, depth) {
   return data;
 }
 
+// Nodes renderers by node type
+function renderDeleted(node, depth) {
+  return `${renderKey(node.key, depth, '-')}: ${renderValue(node.prevValue, depth)}`;
+}
+
+function renderAdded(node, depth) {
+  return `${renderKey(node.key, depth, '+')}: ${renderValue(node.value, depth)}`;
+}
+
+function renderNested(node, depth, formatValue) {
+  return `${renderKey(node.key, depth)}: ${formatValue(node.children, depth + 1)}`;
+}
+
+function renderChanged(node, depth) {
+  return [
+    `${renderKey(node.key, depth, '-')}: ${renderValue(node.prevValue, depth)}`,
+    `${renderKey(node.key, depth, '+')}: ${renderValue(node.value, depth)}`,
+  ];
+}
+
+function renderUnchanged(node, depth) {
+  return `${renderKey(node.key, depth)}: ${renderValue(node.value, depth)}`;
+}
+
 function format(diff, depth = 0) {
   const items = diff.flatMap((node) => {
-    const { key, type } = node;
-
-    if (type === 'deleted') {
-      return `${renderKey(key, depth, '-')}: ${renderValue(node.prevValue, depth)}`;
+    switch (node.type) {
+      case nodeTypes.deleted:
+        return renderDeleted(node, depth);
+      case nodeTypes.added:
+        return renderAdded(node, depth);
+      case nodeTypes.nested:
+        return renderNested(node, depth, format);
+      case nodeTypes.changed:
+        return renderChanged(node, depth);
+      case nodeTypes.unchanged:
+        return renderUnchanged(node, depth);
+      default:
+        throw new Error(`unsupported node type ${node.type}`);
     }
-
-    if (type === 'added') {
-      return `${renderKey(key, depth, '+')}: ${renderValue(node.value, depth)}`;
-    }
-
-    if (type === 'nested') {
-      return `${renderKey(key, depth)}: ${format(node.children, depth + 1)}`;
-    }
-
-    if (type === 'changed') {
-      return [
-        `${renderKey(key, depth, '-')}: ${renderValue(node.prevValue, depth)}`,
-        `${renderKey(key, depth, '+')}: ${renderValue(node.value, depth)}`,
-      ];
-    }
-
-    return `${renderKey(key, depth)}: ${renderValue(node.value, depth)}`;
   });
 
   return renderItems(items, depth);

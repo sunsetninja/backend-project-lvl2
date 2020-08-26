@@ -1,7 +1,9 @@
 import _ from 'lodash';
+import { nodeTypes } from '../builder.js';
 
 const { isObject, isBoolean } = _;
 
+// Common renderers for all node types
 function renderItems(items) {
   return items.join('\n');
 }
@@ -28,28 +30,40 @@ function renderValue(data) {
   return `'${data}'`;
 }
 
+// Nodes renderers by node type
+function renderDeleted(keyPath) {
+  return `${renderKey(keyPath, 'deleted')}`;
+}
+
+function renderAdded(node, keyPath) {
+  return `${renderKey(keyPath, 'added')} with value: ${renderValue(node.value)}`;
+}
+
+function renderNested(node, keyPath, formatValue) {
+  return formatValue(node.children, keyPath);
+}
+
+function renderChanged(node, keyPath) {
+  return `${renderKey(keyPath, 'changed')}. From ${renderValue(node.prevValue)} to ${renderValue(node.value)}`;
+}
+
 function format(diff, path = '') {
-  const items = diff.filter(({ type }) => type !== 'unchanged').flatMap((node) => {
+  const items = diff.filter(({ type }) => type !== nodeTypes.unchanged).map((node) => {
     const { key, type } = node;
     const keyPath = path ? `${path}.${key}` : key;
 
-    if (type === 'deleted') {
-      return `${renderKey(keyPath, 'deleted')}`;
+    switch (type) {
+      case nodeTypes.deleted:
+        return renderDeleted(keyPath);
+      case nodeTypes.added:
+        return renderAdded(node, keyPath);
+      case nodeTypes.nested:
+        return renderNested(node, keyPath, format);
+      case nodeTypes.changed:
+        return renderChanged(node, keyPath);
+      default:
+        throw new Error(`unsupported node type ${type}`);
     }
-
-    if (type === 'added') {
-      return `${renderKey(keyPath, 'added')} with value: ${renderValue(node.value)}`;
-    }
-
-    if (type === 'nested') {
-      return format(node.children, keyPath);
-    }
-
-    if (type === 'changed') {
-      return `${renderKey(keyPath, 'changed')}. From ${renderValue(node.prevValue)} to ${renderValue(node.value)}`;
-    }
-
-    return `${renderKey(keyPath)}: ${renderValue(node, keyPath)}`;
   });
 
   return renderItems(items, path);

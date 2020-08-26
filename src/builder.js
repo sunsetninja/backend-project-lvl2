@@ -4,6 +4,14 @@ const {
   has, union, sortBy, isObject,
 } = _;
 
+const nodeTypes = {
+  deleted: 'deleted',
+  added: 'added',
+  nested: 'nested',
+  changed: 'changed',
+  unchanged: 'unchanged',
+};
+
 function buildDiff(obj1, obj2) {
   const allKeys = sortBy(union(Object.keys(obj1).concat(Object.keys(obj2))));
 
@@ -11,7 +19,7 @@ function buildDiff(obj1, obj2) {
     if (!has(obj2, key)) {
       return {
         key,
-        type: 'deleted',
+        type: nodeTypes.deleted,
         prevValue: obj1[key],
       };
     }
@@ -19,7 +27,7 @@ function buildDiff(obj1, obj2) {
     if (!has(obj1, key)) {
       return {
         key,
-        type: 'added',
+        type: nodeTypes.added,
         value: obj2[key],
       };
     }
@@ -27,7 +35,7 @@ function buildDiff(obj1, obj2) {
     if (isObject(obj1[key]) && isObject(obj2[key])) {
       return {
         key,
-        type: 'nested',
+        type: nodeTypes.nested,
         children: buildDiff(obj1[key], obj2[key]),
       };
     }
@@ -35,7 +43,7 @@ function buildDiff(obj1, obj2) {
     if (obj1[key] !== obj2[key]) {
       return {
         key,
-        type: 'changed',
+        type: nodeTypes.changed,
         value: obj2[key],
         prevValue: obj1[key],
       };
@@ -43,10 +51,11 @@ function buildDiff(obj1, obj2) {
 
     return {
       key,
-      type: 'unchanged',
+      type: nodeTypes.unchanged,
       value: obj1[key],
     };
   }, []);
 }
 
+export { nodeTypes };
 export default { buildDiff };
