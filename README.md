@@ -6,8 +6,7 @@
 ## Installation
 
 ```sh
-  make install
-  npm link
+  make setup
 ```
 
 ## Usage
