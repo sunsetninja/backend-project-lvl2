@@ -23,20 +23,34 @@ To see a list of commands that GenDiff offers, you can run:
   gendiff [options] <filepath1> <filepath2>
 ```
 
-### Usage example
+### Usage examples
 
 ```sh
   node bin/gendiff.js --format json config-1.yml config-2.yml
 ```
 
-### Supported config extentions
+## Supported config extentions
 
 * json
 * yml
 * ini
 
-### Supported output formats
+## Supported output formats
 
 * stylish (default)
 * plain
 * json
+
+## Examples
+
+### Stylish output
+
+[![asciicast](https://asciinema.org/a/LnOPuEFZQLHsMSOuB5aJ1xLOe.svg)](https://asciinema.org/a/4vydIU5kuL5WviAIukwCIRf3C)
+
+### Plain output
+
+[![asciicast](https://asciinema.org/a/etSPzOMj2JSi4TQ9XuxGolLOw.svg)](https://asciinema.org/a/etSPzOMj2JSi4TQ9XuxGolLOw)
+
+### JSON output
+
+[![asciicast](https://asciinema.org/a/LnOPuEFZQLHsMSOuB5aJ1xLOe.svg)](https://asciinema.org/a/LnOPuEFZQLHsMSOuB5aJ1xLOe)
