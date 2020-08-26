@@ -7,6 +7,7 @@
 
 ```sh
   make install
+  npm link
 ```
 
 ## Usage
@@ -14,7 +15,7 @@
 To see a list of commands that GenDiff offers, you can run:
 
 ```sh
-  node bin/gendiff.js --help
+  gendiff --help
 ```
 
 ### Usage signature
@@ -26,7 +27,7 @@ To see a list of commands that GenDiff offers, you can run:
 ### Usage examples
 
 ```sh
-  node bin/gendiff.js --format json config-1.yml config-2.yml
+  gendiff --format json config-1.yml config-2.yml
 ```
 
 ## Supported config extentions
