@@ -49,4 +49,4 @@ function buildDiff(obj1, obj2) {
   }, []);
 }
 
-export { buildDiff };
+export default { buildDiff };

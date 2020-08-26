@@ -8,34 +8,27 @@ function getFixturesFilePath(filename) {
   return `__tests__/__fixtures__/${filename}`;
 }
 
-describe('genDiff tests', () => {
-  describe('stylish formatter', () => {
-    const expected = readFileSync(getFixturesFilePath('expected-stylish.txt'), 'utf-8');
+describe('config diff generator tests', () => {
+  const formatters = [
+    'stylish',
+    'plain',
+    'json',
+  ];
 
-    test.each([
-      'json', 'yml', 'ini',
-    ])('should return correct diff output with configs with type: %s', (configExtention) => {
+  describe.each(formatters)('formatter: %s', (formatter) => {
+    const expected = readFileSync(getFixturesFilePath(`expected-${formatter}.txt`), 'utf-8');
+    const configExtentions = [
+      'json',
+      'yml',
+      'ini',
+    ];
+
+    test.each(configExtentions)('config extention: %s', (configExtention) => {
       expect(
         genDiff(
           getFixturesFilePath(`file1.${configExtention}`),
           getFixturesFilePath(`file2.${configExtention}`),
-          { format: 'stylish' },
-        ),
-      ).toEqual(expected);
-    });
-  });
-
-  describe('plain formatter', () => {
-    const expected = readFileSync(getFixturesFilePath('expected-plain.txt'), 'utf-8');
-
-    test.each([
-      'json', 'yml', 'ini',
-    ])('should return correct diff output with configs with type: %s', (configExtention) => {
-      expect(
-        genDiff(
-          getFixturesFilePath(`file1.${configExtention}`),
-          getFixturesFilePath(`file2.${configExtention}`),
-          { format: 'plain' },
+          { format: formatter },
         ),
       ).toEqual(expected);
     });

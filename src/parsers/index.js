@@ -1,17 +1,19 @@
 import path from 'path';
-import yaml from 'js-yaml';
-import ini from 'ini';
+
+import json from './json.js';
+import ini from './ini.js';
+import yaml from './yaml.js';
 
 const parsers = {
-  '.json': JSON.parse,
-  '.yml': yaml.safeLoad,
-  '.ini': ini.parse,
+  '.json': json,
+  '.yml': yaml,
+  '.ini': ini,
 };
 
 function parseConfigFile(filepath, filecontent) {
   const parser = parsers[path.extname(filepath)];
 
-  return parser(filecontent);
+  return parser.parse(filecontent);
 }
 
 export { parseConfigFile };
