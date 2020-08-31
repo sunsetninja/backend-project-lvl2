@@ -1,5 +1,5 @@
 import reader from './reader.js';
-import { parseConfigFile } from './parsers/index.js';
+import { parseConfigFile } from './parsers.js';
 import builder from './builder.js';
 import { formatDiff } from './formatters/index.js';
 
