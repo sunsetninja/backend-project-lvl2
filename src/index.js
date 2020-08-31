@@ -1,13 +1,9 @@
-import _ from 'lodash';
 import reader from './reader.js';
 import { parseConfigFile } from './parsers/index.js';
 import builder from './builder.js';
 import { formatDiff } from './formatters/index.js';
 
-const { get } = _;
-
-function genDiff(filepath1, filepath2, options) {
-  const format = get(options, 'format', 'stylish');
+function genDiff(filepath1, filepath2, format = 'stylish') {
   const filedata1 = parseConfigFile(filepath1, reader.readConfigFile(filepath1));
   const filedata2 = parseConfigFile(filepath2, reader.readConfigFile(filepath2));
 

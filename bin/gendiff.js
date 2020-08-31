@@ -12,7 +12,7 @@ program
   .helpOption('-h, --help', 'output usage information')
   .option('-f, --format [type]', 'output format', 'stylish')
   .action((filepath1, filepath2, options) => {
-    console.log(genDiff(filepath1, filepath2, options));
+    console.log(genDiff(filepath1, filepath2, options.format));
   });
 
 program.parse(process.argv);
