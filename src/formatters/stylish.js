@@ -13,17 +13,17 @@ const renderItems = (items, depth) => `{\n${items.join('\n')}\n${renderIndent(de
 const renderKey = (key, depth, sign = ' ') => `  ${renderIndent(depth)}${sign.padEnd(2, ' ')}${key}`;
 
 const renderValue = (data, depth) => {
-  if (_.isObject(data)) {
-    const nestedDepth = depth + 1;
-
-    const items = Object
-      .entries(data)
-      .map(([key, value]) => `${renderKey(key, nestedDepth)}: ${renderValue(value, nestedDepth)}`);
-
-    return renderItems(items, nestedDepth);
+  if (!_.isObject(data)) {
+    return data;
   }
 
-  return data;
+  const nestedDepth = depth + 1;
+
+  const items = Object
+    .entries(data)
+    .map(([key, value]) => `${renderKey(key, nestedDepth)}: ${renderValue(value, nestedDepth)}`);
+
+  return renderItems(items, nestedDepth);
 };
 
 // Nodes renderers by node type
