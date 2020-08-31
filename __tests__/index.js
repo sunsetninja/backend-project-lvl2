@@ -2,7 +2,7 @@ import {
   describe, test, expect,
 } from '@jest/globals';
 import { readFileSync } from 'fs';
-import genDiff from '../../src/index.js';
+import genDiff from '../src/index.js';
 
 const getFixturesFilePath = (filename) => `__tests__/__fixtures__/${filename}`;
 
