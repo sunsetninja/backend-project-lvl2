@@ -32,10 +32,10 @@ const parsers = {
   '.ini': iniParser,
 };
 
-const parseConfigFile = (filepath, filecontent) => {
-  const parser = parsers[path.extname(filepath)];
+const parseConfig = (confgType, config) => {
+  const parser = parsers[confgType];
 
-  return parser.parse(filecontent);
+  return parser.parse(config);
 };
 
-export { parseConfigFile };
+export { parseConfig };
