@@ -1,9 +1,5 @@
 import _ from 'lodash';
 
-const {
-  has, union, sortBy, isObject,
-} = _;
-
 const nodeTypes = {
   deleted: 'deleted',
   added: 'added',
@@ -13,10 +9,10 @@ const nodeTypes = {
 };
 
 const buildDiff = (obj1, obj2) => {
-  const allKeys = sortBy(union(Object.keys(obj1).concat(Object.keys(obj2))));
+  const allKeys = _.sortBy(_.union(Object.keys(obj1).concat(Object.keys(obj2))));
 
   return allKeys.map((key) => {
-    if (!has(obj2, key)) {
+    if (!_.has(obj2, key)) {
       return {
         key,
         type: nodeTypes.deleted,
@@ -24,7 +20,7 @@ const buildDiff = (obj1, obj2) => {
       };
     }
 
-    if (!has(obj1, key)) {
+    if (!_.has(obj1, key)) {
       return {
         key,
         type: nodeTypes.added,
@@ -32,7 +28,7 @@ const buildDiff = (obj1, obj2) => {
       };
     }
 
-    if (isObject(obj1[key]) && isObject(obj2[key])) {
+    if (_.isObject(obj1[key]) && _.isObject(obj2[key])) {
       return {
         key,
         type: nodeTypes.nested,

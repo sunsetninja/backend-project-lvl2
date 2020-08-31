@@ -1,8 +1,6 @@
 import _ from 'lodash';
 import { nodeTypes } from '../builder.js';
 
-const { isObject } = _;
-
 // Common renderers for all node types
 const renderIndent = (count) => {
   const tabLength = 4;
@@ -15,7 +13,7 @@ const renderItems = (items, depth) => `{\n${items.join('\n')}\n${renderIndent(de
 const renderKey = (key, depth, sign = ' ') => `  ${renderIndent(depth)}${sign.padEnd(2, ' ')}${key}`;
 
 const renderValue = (data, depth) => {
-  if (isObject(data)) {
+  if (_.isObject(data)) {
     const nestedDepth = depth + 1;
 
     const items = Object

@@ -1,8 +1,6 @@
 import _ from 'lodash';
 import { nodeTypes } from '../builder.js';
 
-const { isObject, isBoolean } = _;
-
 // Common renderers for all node types
 const renderItems = (items) => items.join('\n');
 
@@ -17,11 +15,11 @@ const renderKey = (key, type) => {
 };
 
 const renderValue = (data) => {
-  if (isObject(data)) {
+  if (_.isObject(data)) {
     return '[complex value]';
   }
 
-  if (isBoolean(data)) {
+  if (_.isBoolean(data)) {
     return data;
   }
 

@@ -1,12 +1,10 @@
 import ini from 'ini';
 import _ from 'lodash';
 
-const { mapValues, isObject } = _;
-
 const isNumeric = (value) => !Number.isNaN(parseFloat(value)) && Number.isFinite(Number(value));
 
-const numberifyValues = (data) => mapValues(data, (value) => {
-  if (isObject(value)) {
+const numberifyValues = (data) => _.mapValues(data, (value) => {
+  if (_.isObject(value)) {
     return numberifyValues(value);
   }
   if (isNumeric(value)) {
