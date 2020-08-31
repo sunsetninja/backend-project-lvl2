@@ -4,21 +4,17 @@ import { nodeTypes } from '../builder.js';
 const { isObject } = _;
 
 // Common renderers for all node types
-function renderIndent(count) {
+const renderIndent = (count) => {
   const tabLength = 4;
 
   return ' '.repeat(tabLength * count);
-}
+};
 
-function renderItems(items, depth) {
-  return `{\n${items.join('\n')}\n${renderIndent(depth)}}`;
-}
+const renderItems = (items, depth) => `{\n${items.join('\n')}\n${renderIndent(depth)}}`;
 
-function renderKey(key, depth, sign = ' ') {
-  return `  ${renderIndent(depth)}${sign.padEnd(2, ' ')}${key}`;
-}
+const renderKey = (key, depth, sign = ' ') => `  ${renderIndent(depth)}${sign.padEnd(2, ' ')}${key}`;
 
-function renderValue(data, depth) {
+const renderValue = (data, depth) => {
   if (isObject(data)) {
     const nestedDepth = depth + 1;
 
@@ -30,33 +26,23 @@ function renderValue(data, depth) {
   }
 
   return data;
-}
+};
 
 // Nodes renderers by node type
-function renderDeleted(node, depth) {
-  return `${renderKey(node.key, depth, '-')}: ${renderValue(node.prevValue, depth)}`;
-}
+const renderDeleted = (node, depth) => `${renderKey(node.key, depth, '-')}: ${renderValue(node.prevValue, depth)}`;
 
-function renderAdded(node, depth) {
-  return `${renderKey(node.key, depth, '+')}: ${renderValue(node.value, depth)}`;
-}
+const renderAdded = (node, depth) => `${renderKey(node.key, depth, '+')}: ${renderValue(node.value, depth)}`;
 
-function renderNested(node, depth, formatValue) {
-  return `${renderKey(node.key, depth)}: ${formatValue(node.children, depth + 1)}`;
-}
+const renderNested = (node, depth, formatValue) => `${renderKey(node.key, depth)}: ${formatValue(node.children, depth + 1)}`;
 
-function renderChanged(node, depth) {
-  return [
-    `${renderKey(node.key, depth, '-')}: ${renderValue(node.prevValue, depth)}`,
-    `${renderKey(node.key, depth, '+')}: ${renderValue(node.value, depth)}`,
-  ];
-}
+const renderChanged = (node, depth) => [
+  `${renderKey(node.key, depth, '-')}: ${renderValue(node.prevValue, depth)}`,
+  `${renderKey(node.key, depth, '+')}: ${renderValue(node.value, depth)}`,
+];
 
-function renderUnchanged(node, depth) {
-  return `${renderKey(node.key, depth)}: ${renderValue(node.value, depth)}`;
-}
+const renderUnchanged = (node, depth) => `${renderKey(node.key, depth)}: ${renderValue(node.value, depth)}`;
 
-function format(diff, depth = 0) {
+const format = (diff, depth = 0) => {
   const items = diff.flatMap((node) => {
     switch (node.type) {
       case nodeTypes.deleted:
@@ -75,6 +61,6 @@ function format(diff, depth = 0) {
   });
 
   return renderItems(items, depth);
-}
+};
 
 export default { format };

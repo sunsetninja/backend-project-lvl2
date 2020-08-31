@@ -4,9 +4,7 @@ import {
 import { readFileSync } from 'fs';
 import genDiff from '../../src/index.js';
 
-function getFixturesFilePath(filename) {
-  return `__tests__/__fixtures__/${filename}`;
-}
+const getFixturesFilePath = (filename) => `__tests__/__fixtures__/${filename}`;
 
 const formatters = [
   'stylish',

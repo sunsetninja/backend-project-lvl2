@@ -8,10 +8,10 @@ const formatters = {
   json,
 };
 
-function formatDiff(diff, type) {
+const formatDiff = (diff, type) => {
   const formatter = formatters[type];
 
   return formatter.format(diff);
-}
+};
 
 export { formatDiff };

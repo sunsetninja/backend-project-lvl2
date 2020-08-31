@@ -3,9 +3,7 @@ import _ from 'lodash';
 
 const { mapValues, isObject } = _;
 
-function isNumeric(value) {
-  return !Number.isNaN(parseFloat(value)) && Number.isFinite(Number(value));
-}
+const isNumeric = (value) => !Number.isNaN(parseFloat(value)) && Number.isFinite(Number(value));
 
 const numberifyValues = (data) => mapValues(data, (value) => {
   if (isObject(value)) {

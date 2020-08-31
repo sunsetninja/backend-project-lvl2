@@ -12,7 +12,7 @@ const nodeTypes = {
   unchanged: 'unchanged',
 };
 
-function buildDiff(obj1, obj2) {
+const buildDiff = (obj1, obj2) => {
   const allKeys = sortBy(union(Object.keys(obj1).concat(Object.keys(obj2))));
 
   return allKeys.map((key) => {
@@ -55,7 +55,7 @@ function buildDiff(obj1, obj2) {
       value: obj1[key],
     };
   }, []);
-}
+};
 
 export { nodeTypes };
 export default { buildDiff };

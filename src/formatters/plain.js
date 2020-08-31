@@ -4,11 +4,9 @@ import { nodeTypes } from '../builder.js';
 const { isObject, isBoolean } = _;
 
 // Common renderers for all node types
-function renderItems(items) {
-  return items.join('\n');
-}
+const renderItems = (items) => items.join('\n');
 
-function renderKey(key, type) {
+const renderKey = (key, type) => {
   const typeActions = {
     added: 'added',
     deleted: 'removed',
@@ -16,9 +14,9 @@ function renderKey(key, type) {
   };
 
   return `Property '${key}' was ${typeActions[type]}`;
-}
+};
 
-function renderValue(data) {
+const renderValue = (data) => {
   if (isObject(data)) {
     return '[complex value]';
   }
@@ -28,26 +26,18 @@ function renderValue(data) {
   }
 
   return `'${data}'`;
-}
+};
 
 // Nodes renderers by node type
-function renderDeleted(keyPath) {
-  return `${renderKey(keyPath, 'deleted')}`;
-}
+const renderDeleted = (keyPath) => `${renderKey(keyPath, 'deleted')}`;
 
-function renderAdded(node, keyPath) {
-  return `${renderKey(keyPath, 'added')} with value: ${renderValue(node.value)}`;
-}
+const renderAdded = (node, keyPath) => `${renderKey(keyPath, 'added')} with value: ${renderValue(node.value)}`;
 
-function renderNested(node, keyPath, formatValue) {
-  return formatValue(node.children, keyPath);
-}
+const renderNested = (node, keyPath, formatValue) => formatValue(node.children, keyPath);
 
-function renderChanged(node, keyPath) {
-  return `${renderKey(keyPath, 'changed')}. From ${renderValue(node.prevValue)} to ${renderValue(node.value)}`;
-}
+const renderChanged = (node, keyPath) => `${renderKey(keyPath, 'changed')}. From ${renderValue(node.prevValue)} to ${renderValue(node.value)}`;
 
-function format(diff, path = '') {
+const format = (diff, path = '') => {
   const items = diff.filter(({ type }) => type !== nodeTypes.unchanged).map((node) => {
     const { key, type } = node;
     const keyPath = path ? `${path}.${key}` : key;
@@ -67,6 +57,6 @@ function format(diff, path = '') {
   });
 
   return renderItems(items, path);
-}
+};
 
 export default { format };
