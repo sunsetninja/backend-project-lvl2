@@ -9,7 +9,7 @@ const nodeTypes = {
 };
 
 const buildDiff = (obj1, obj2) => {
-  const sortedKeys = _.sortBy(_.union(Object.keys(obj1).concat(Object.keys(obj2))));
+  const sortedKeys = _.sortBy(_.union(Object.keys(obj1), Object.keys(obj2)));
 
   return sortedKeys.map((key) => {
     if (!_.has(obj2, key)) {
@@ -50,7 +50,7 @@ const buildDiff = (obj1, obj2) => {
       type: nodeTypes.unchanged,
       value: obj1[key],
     };
-  }, []);
+  });
 };
 
 export { nodeTypes };
