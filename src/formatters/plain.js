@@ -26,15 +26,6 @@ const renderValue = (data) => {
   return `'${data}'`;
 };
 
-// Nodes renderers by node type
-const renderDeleted = (keyPath) => `${renderKey(keyPath, 'deleted')}`;
-
-const renderAdded = (node, keyPath) => `${renderKey(keyPath, 'added')} with value: ${renderValue(node.value)}`;
-
-const renderNested = (node, keyPath, formatValue) => formatValue(node.children, keyPath);
-
-const renderChanged = (node, keyPath) => `${renderKey(keyPath, 'changed')}. From ${renderValue(node.prevValue)} to ${renderValue(node.value)}`;
-
 const format = (diff, path = '') => {
   const items = diff.filter(({ type }) => type !== nodeTypes.unchanged).map((node) => {
     const { key, type } = node;
@@ -42,13 +33,13 @@ const format = (diff, path = '') => {
 
     switch (type) {
       case nodeTypes.deleted:
-        return renderDeleted(keyPath);
+        return `${renderKey(keyPath, 'deleted')}`;
       case nodeTypes.added:
-        return renderAdded(node, keyPath);
+        return `${renderKey(keyPath, 'added')} with value: ${renderValue(node.value)}`;
       case nodeTypes.nested:
-        return renderNested(node, keyPath, format);
+        return format(node.children, keyPath);
       case nodeTypes.changed:
-        return renderChanged(node, keyPath);
+        return `${renderKey(keyPath, 'changed')}. From ${renderValue(node.prevValue)} to ${renderValue(node.value)}`;
       default:
         throw new Error(`unsupported node type ${type}`);
     }
