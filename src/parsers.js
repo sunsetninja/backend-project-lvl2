@@ -2,8 +2,6 @@ import ini from 'ini';
 import yaml from 'js-yaml';
 import _ from 'lodash';
 
-const jsonParser = JSON;
-
 const isNumeric = (value) => !Number.isNaN(parseFloat(value)) && Number.isFinite(Number(value));
 
 const numberifyValues = (data) => _.mapValues(data, (value) => {
@@ -19,22 +17,16 @@ const numberifyValues = (data) => _.mapValues(data, (value) => {
 
 const parseIni = (filecontent) => numberifyValues(ini.parse(filecontent));
 
-const iniParser = { parse: parseIni };
-
-const yamlParser = {
-  parse: yaml.safeLoad,
-};
-
 const parsers = {
-  '.json': jsonParser,
-  '.yml': yamlParser,
-  '.ini': iniParser,
+  json: { parse: JSON.parse },
+  yml: { parse: yaml.safeLoad },
+  ini: { parse: parseIni },
 };
 
-const parseConfig = (confgType, config) => {
-  const parser = parsers[confgType];
+const parseData = (type, data) => {
+  const parser = parsers[type];
 
-  return parser.parse(config);
+  return parser.parse(data);
 };
 
-export { parseConfig };
+export { parseData };
