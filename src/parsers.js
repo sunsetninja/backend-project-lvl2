@@ -18,15 +18,15 @@ const numberifyValues = (data) => _.mapValues(data, (value) => {
 const parseIni = (filecontent) => numberifyValues(ini.parse(filecontent));
 
 const parsers = {
-  json: { parse: JSON.parse },
-  yml: { parse: yaml.safeLoad },
-  ini: { parse: parseIni },
+  json: JSON.parse,
+  yml: yaml.safeLoad,
+  ini: parseIni,
 };
 
 const parseData = (type, data) => {
-  const parser = parsers[type];
+  const parse = parsers[type];
 
-  return parser.parse(data);
+  return parse(data);
 };
 
 export { parseData };
